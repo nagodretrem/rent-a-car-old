@@ -1,16 +1,22 @@
-import { useContext } from "react";
-import { Link } from "react-router-dom";
-import { AuthContext } from "../../contexts/AuthContext";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { logout } from "../../auth/authSlice";
+import { useAppDispatch } from "../../store/hooks";
+import { RootState } from "../../store/store";
+import Cart from "../Cart/Cart";
 
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const authContext: any = useContext(AuthContext);
+  const loginState = useSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
+  console.log(loginState);
+  const dispatch = useAppDispatch();
 
-  const cartState = useSelector((state: any) => state.cart);
-  console.log(cartState);
-
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
   return (
     <nav
       className="navbar bg-dark navbar-expand-lg bg-body-tertiary"
@@ -43,25 +49,18 @@ const Navbar = (props: Props) => {
                 Ürün Ekle
               </Link>
             </li>
-            {!authContext.isAuthenticated && (
-              <li className="nav-item">
-                <Link className="nav-link" to={"/login"}>
-                  Giriş Yap
-                </Link>
-              </li>
-            )}
           </ul>
-          <form className="d-flex" role="search">
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-            />
-            <button className="btn btn-outline-success" type="submit">
-              Search
+          <Cart />
+          {!loginState && (
+            <Link to={"/login"}>
+              <button className="btn btn-primary">Login</button>
+            </Link>
+          )}
+          {loginState && (
+            <button onClick={logoutHandler} className="btn btn-warning">
+              <>Logout</>
             </button>
-          </form>
+          )}
         </div>
       </div>
     </nav>

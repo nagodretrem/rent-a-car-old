@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { ProductModel } from "../../models/responses/ProductModel";
 import { useDispatch } from "react-redux";
+import { cartActions } from "../Cart/cartSlice";
 type Props = {
   product: ProductModel;
 };
@@ -8,8 +9,16 @@ type Props = {
 const ProductCard = (props: Props) => {
   const dispatch = useDispatch();
 
-  const addProduct = (product: any) => {
-    dispatch({ type: "ADD_TO_CART", payload: product });
+  const addToCart = () => {
+    dispatch(
+      cartActions.addToCart({
+        id: props.product.id,
+        title: props.product.title,
+        price: props.product.price,
+        subTotalPrice: 0,
+        quantity: 1,
+      })
+    );
   };
 
   return (
@@ -30,7 +39,7 @@ const ProductCard = (props: Props) => {
         </Link>
 
         <button
-          onClick={() => addProduct(props.product)}
+          onClick={() => addToCart()}
           className="btn btn-secondary"
         >
           Sepete Ekle

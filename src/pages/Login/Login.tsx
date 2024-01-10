@@ -1,12 +1,16 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../store/hooks";
+import { login } from "../../auth/authSlice";
 
 type Props = {};
 
 const Login = (props: Props) => {
-  const authContext: any = useContext(AuthContext);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const loginHandler = () => {
+    dispatch(login());
+    navigate("/");
+  };
 
   return (
     <div className="container mt-5">
@@ -42,10 +46,7 @@ const Login = (props: Props) => {
           <label className="form-check-label">Remember me</label>
         </div>
         <button
-          onClick={() => {
-            authContext.setIsAuthenticated(true);
-            navigate("/");
-          }}
+          onClick={loginHandler}
           className="btn btn-primary w-100 py-2"
           type="button"
         >
